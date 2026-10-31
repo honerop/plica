@@ -31,7 +31,7 @@ You can work on Babel and Plica at the same time with `nix build --override-inpu
 | `files [PATH]` | Emit a structured JSON list of `{name}` records |
 | `capture CMD ARGS` | Run a program and emit `{code,stdout,stderr}` JSON |
 | `ask PROMPT` | Ask Babel's OpenCode AI provider; does **not** execute AI output |
-| `help` / `exit` | Show help or exit |
+| `run PROGRAM ARGS` | Explicitly launch a Linux executable with terminal I/O |\n| `help` / `exit` | Show help or exit |
 | Any other command | Launch directly with inherited terminal I/O |
 
 Example session:
@@ -44,9 +44,29 @@ plica> files .
 [{"name":"babel"},{"name":"plica"}]
 plica> git status
 ... normal git output ...
+plica> /usr/bin/env printf linux-ok
+linux-ok
+plica> run /usr/bin/env printf explicit-ok
+explicit-ok
+plica> ./my-program argument
+... program output ...
 plica> capture git status --porcelain
 {"code":0,"stderr":"","stdout":"..."}
 ```
+
+## Linux executable lookup
+
+Plica launches **real native executables**, not a simulated set of builtins:
+
+- `ls -la`, `git status` or `nvim` resolve the executable by the inherited `PATH`, just like other Unix shells.
+- `/usr/bin/env`, `/usr/bin/ls` or `/opt/tool/bin/app` execute an exact absolute path **when it exists on the host**.
+- `./program args` executes a binary or executable script from the current working directory. The `cd` command changes that directory persistently.
+- `run COMMAND args` is an explicit form of the same native process execution. Unlike `capture`, it inherits standard input/output/error for interactive programs.
+- `capture COMMAND args` invokes a process and returns structured `code`, `stdout` and `stderr`, subject to Babel's limits.
+
+**NixOS note:** most packages are not installed under `/usr/bin`. They are exposed via `PATH` from `/nix/store`, `/run/current-system/sw/bin`, and user profiles. Use `ls` instead of hardcoding `/usr/bin/ls` unless that path really exists. `/usr/bin/env` is commonly available for compatibility.
+
+Plica does not interpret command strings through `/bin/sh`; no shell quoting, redirection or pipelines are supported yet. The native process uses the permissions of the calling user.
 
 ## Known limitations
 
