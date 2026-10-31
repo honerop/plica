@@ -37,6 +37,19 @@ rustc --edition=2021 "$BABEL_SRC/src/main.rs" --extern babel_compiler=.build/lib
 
 If you want to iterate on a local Babel checkout instead of Nix's pinned copy, export `BABEL_SRC="$PWD/../babel"` before running these commands.
 
+## Test native Linux executables
+
+The native command path uses Babel's `processinherit`, which runs binaries from the inherited `PATH` or direct absolute/relative executable paths.
+
+```text
+plica> git status
+plica> /usr/bin/env printf hello
+plica> run /usr/bin/env printf hello
+plica> ./local-executable
+```
+
+The smoke test also creates an executable script and verifies invocation by name through a temporary PATH addition, via `run`, by its absolute path, and using `./` after `cd`. It conditionally checks a `/usr/bin/env` executable when available. On NixOS, most binaries live in the Nix store, not `/usr/bin`.
+
 ## Smoke test
 
 ```sh
