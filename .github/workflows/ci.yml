@@ -1,0 +1,14 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/nix-installer-action@v17
+      - name: Build Babel-native shell
+        run: nix --extra-experimental-features 'nix-command flakes' build --show-trace
+      - name: REPL smoke test
+        run: bash tests/smoke.sh result/bin/plica
