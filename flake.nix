@@ -2,9 +2,9 @@
   description = "Plica: structured interactive shell written in Babel";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # Pinned to the first Babel main commit with Plica terminal primitives.
+    # Pinned to Babel main with importable segment modules.
     # Override this input with path:../babel while hacking on both repos.
-    babel.url = "github:honerop/babel/2ecbb50530487c89fea84a52901ab9def58a81cd";
+    babel.url = "github:honerop/babel/063dca2abb02a480019ee820f82359fa20b574a3";
   };
   outputs = { self, nixpkgs, babel }:
     let
@@ -23,6 +23,7 @@
             buildPhase = ''
               runHook preBuild
               mkdir -p .build
+              export CARGO_MANIFEST_DIR=${babel}
               rustc --edition=2021 --crate-name babel_compiler --crate-type lib \
                 ${babel}/src/lib.rs -o .build/libbabel_compiler.rlib
               rustc --edition=2021 ${babel}/src/main.rs \
