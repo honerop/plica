@@ -23,6 +23,7 @@
             buildPhase = ''
               runHook preBuild
               mkdir -p .build
+              export CARGO_MANIFEST_DIR=${babel}
               rustc --edition=2021 --crate-name babel_compiler --crate-type lib \
                 ${babel}/src/lib.rs -o .build/libbabel_compiler.rlib
               rustc --edition=2021 ${babel}/src/main.rs \
