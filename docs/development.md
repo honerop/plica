@@ -20,7 +20,7 @@ nix build --override-input babel path:../babel --show-trace
 nix run . --override-input babel path:../babel
 ```
 
-The required terminal primitives are already merged into `main`. A dirty Babel checkout is acceptable during local iteration, but Nix may warn that it is dirty.
+The required terminal primitives and segment imports are merged into Babel `main`. Plica now imports `system.fs`, `system.process`, `system.terminal`, and `ai.chat`. A dirty Babel checkout is acceptable during local iteration, but Nix may warn that it is dirty.
 
 ## Faster development loop
 

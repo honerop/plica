@@ -2,9 +2,9 @@
   description = "Plica: structured interactive shell written in Babel";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # Pinned to the first Babel main commit with Plica terminal primitives.
+    # Pinned to Babel main with importable segment modules.
     # Override this input with path:../babel while hacking on both repos.
-    babel.url = "github:honerop/babel/2ecbb50530487c89fea84a52901ab9def58a81cd";
+    babel.url = "github:honerop/babel/e4b15a2298d9c51332ce40b53aa53d05544d3ce8";
   };
   outputs = { self, nixpkgs, babel }:
     let

@@ -68,10 +68,14 @@ Plica launches **real native executables**, not a simulated set of builtins:
 
 Plica does not interpret command strings through `/bin/sh`; no shell quoting, redirection or pipelines are supported yet. The native process uses the permissions of the calling user.
 
+## Babel modules
+
+Plica now explicitly imports `system.fs`, `system.process`, `system.terminal`, and `ai.chat` from the versioned Babel segments. Process invocation, filesystem listing, prompts, and AI queries use their module wrappers; other native primitives remain available for compatibility. See [architecture](docs/architecture.md).
+
 ## Known limitations
 
 Argument parsing currently splits on whitespace. Quoting, escaping, globs, pipelines (`|`), redirection, environment assignments, history, completion, shell script evaluation, background jobs, and robust POSIX job control are not yet implemented. `files` and `capture` emit structured data, but there is no structured pipeline syntax yet.
 
 Plica's application source is 100% Babel: [`src/main.babel`](src/main.babel). The build uses Nix and Babel's existing Rust compiler/runtime for OS bindings. AI support uses Babel's `chat` builtin and an available OpenCode CLI/provider. Do not run AI-generated shell commands without review.
 
-The required Babel terminal primitives were merged in [Babel PR #47](https://github.com/honerop/babel/pull/47). The flake pins the corresponding merge commit. There is no `flake.lock` yet, so `nixpkgs` is not pinned; generate and commit a lockfile before treating builds as reproducible.
+The required Babel terminal primitives were merged in [Babel PR #47](https://github.com/honerop/babel/pull/47), and segment imports were added in [Babel PR #49](https://github.com/honerop/babel/pull/49). The flake pins a newer Babel commit that includes the segment resolver. There is no `flake.lock` yet, so `nixpkgs` is not pinned; generate and commit a lockfile before treating builds as reproducible.
