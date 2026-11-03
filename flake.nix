@@ -4,7 +4,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # Pinned to Babel main with importable segment modules.
     # Override this input with path:../babel while hacking on both repos.
-    babel.url = "github:honerop/babel/e4b15a2298d9c51332ce40b53aa53d05544d3ce8";
+    babel.url = "github:honerop/babel/063dca2abb02a480019ee820f82359fa20b574a3";
   };
   outputs = { self, nixpkgs, babel }:
     let
